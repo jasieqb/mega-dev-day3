@@ -1,0 +1,29 @@
+---
+layout: runbook
+title: '0002 · Triage duplicates by verified cause'
+owner: jasieqb
+status: proposed
+reviewed: 2026-10-28
+signature: 'jasieqb · MEGA.dev S01E03 · 2026-10-28'
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## Context
+
+[Review of #4471](/kb/incidents/4471-review) demonstrates that subject matching combines different defects and separates reports of the same defect. Decision 0001 remains unchanged as the historical accepted record. This replacement is proposed for desk adoption, not a claim of authorization by the desk.
+
+## Proposed replacement
+
+Replace [0001](/kb/decisions/0001-dedupe-by-subject) for future triage. Match verified causes using tenant configuration, channel, form version, and observed behavior. Use subject matches only to locate candidates. Unknown tenant or contradictory behavior requires investigation before merging. Count each report ID once and retain original reports and timestamps. Distinguish receipt dates from merge dates.
+
+<DedupeExplorer />
+
+## Consequences
+
+Triage needs configuration lookup and reading, but preserves distinct engineering work. Review stale guidance against executable views, keep uncertain observations visible, and rerender the kb after new evidence. Proposed rollout: desk reviews this record, updates its triage procedure, and checks new reports against separate cause tickets.
+
+<RenderStamp {signature} />

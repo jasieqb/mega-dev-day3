@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const analysis=JSON.parse(readFileSync('evidence/analysis.json'));
+assert.equal(analysis.uniqueReports,412);
+assert.equal(analysis.duplicateRows,15);
+assert.deepEqual(analysis.groups.map(g=>[g.cause,g.reports.length]),[['parser',379],['hint',33]]);
+assert.equal(new Set(analysis.groups.flatMap(g=>g.reports)).size,412);
+const html=readFileSync('rendered/kb/incidents/4471-review/index.html','utf8');
+for(const expected of ['379','33','412','DR-333P-92GE','5 reports read as a one-day move','<svg','same subject, same tenant, different channel','same subject, same channel, different tenant']) assert.ok(html.includes(expected),expected);
+assert.ok(!html.includes('undefined'));
+assert.ok(!html.includes('no desk ref:'));
+const triage=readFileSync('rendered/kb/triage/dedupe/index.html','utf8');
+assert.ok(triage.includes('Nobody has re-read this page'));
+console.log('Verified counts, distinct membership, computed render, signature, chart, counterexamples, and stale warning.');
