@@ -1,3 +1,15 @@
+# Day 3 deliverables
+
+- [Signed knowledge page source](4471-review.svx)
+- [Rendered knowledge page — download and open](4471-review.html)
+- [Ticket 1: parser, 379 reports, fixed](https://github.com/jasieqb/mega-dev-day3/issues/1)
+- [Ticket 2: form hint, 33 reports, not planned / form retired](https://github.com/jasieqb/mega-dev-day3/issues/2)
+- [Build, evidence, and navigation](DELIVERABLES.md)
+
+Root page files are generated copies; the source lives in `src/routes/kb/incidents/4471-review/+page.svx`. Run `npm ci`, `npm run analyze`, `npm run build`, then `npm run verify`.
+
+---
+
 # kb — the support knowledge base
 
 **kb** = knowledge base. What the support desk knows about how our products break, written

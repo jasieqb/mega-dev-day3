@@ -1,0 +1,67 @@
+---
+layout: runbook
+title: '#4471 reviewed: two date problems hidden in one ticket'
+owner: jasieqb
+status: investigated
+reviewed: 2026-10-28
+signature: 'jasieqb · MEGA.dev S01E03 · 2026-10-28'
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+The [original incident](/kb/incidents/4471) says one issue and one fix queued. Its own rendered cause table contradicts that conclusion. This review uses the support desk export through 4 October 2026, followed by the engineering update shown on the Challenge page after the first submission. The export and the later update are separate evidence.
+
+<Callout kind="warn">
+Keep the shared parser and booking-v3 hint problems separate. Intake tags and matching subjects are not proof of a shared cause. The rendered table below computes membership from unique report IDs, the tenant directory, and the supplied cause rules.
+</Callout>
+
+## What the evidence shows
+
+<CauseTable ticket={4471} />
+
+The export repeats records where ticket-system pages overlap. Deduplicate by report ID before counting. `meta.intakeTag` records a browser-based guess at intake; `tenant.locale` and `tenant.form` determine the supplied classification. Neither the subject nor the browser locale overrides the tenant directory. Exact memberships and an independently runnable analysis are in `evidence/analysis.json` and `scripts/analyze.mjs`.
+
+## Separate engineering tickets
+
+- [Shared month-first parser — GitHub issue 1](https://github.com/jasieqb/mega-dev-day3/issues/1). Day-first dates on the shared parser path are interpreted month first. Harbour Dental's R-41200 describes 7 April becoming 4 July. Test ambiguous dates across tenant locales and channels. Repair the parser's interpretation of the intended date.
+- [booking-v3 date hint — GitHub issue 2](https://github.com/jasieqb/mega-dev-day3/issues/2). For day-first tenants on the form channel, booking-v3 prints MM/DD/YYYY while the form interprets the input in tenant order. Align the displayed hint with interpretation. A form report on booking-v2, or app/email on booking-v3, does not enter this branch.
+
+The `not this ticket` label in the table describes the exported support system: the hint reports were merged into a parser-owned ticket without their own support ticket. The linked GitHub issues are the newly created separate work items; they do not alter the historical export.
+
+## Engineering update: 5 October closure
+
+The [Challenge page](https://hq.mega.dev/challenges/what-it-shows) added an engineering update after the first submission: #4471 closed 05 October. Parser: fixed, `fix(dates): parse dd/mm for eu locales`. Hint: won't fix, booking-v3 form retired. This changes the disposition, not the historical report counts above.
+
+GitHub issue 1 is closed as completed for the parser repair. Issue 2 is closed as not planned because the affected form was retired. A retired form is not a repaired hint. The earlier completed closure on issue 2 was corrected after checking this update. The snapshot's table still reflects the old support-system grouping; use these dated dispositions for current desk triage. Do not infer that the five unusual observations have been individually explained by the broad parser closure.
+
+## Five reports that still need investigation
+
+The table's footnote preserves the desk's one-day-move notes. R-41202, R-41209, R-41236, R-41344, and R-41620 are filed under parser by the supplied tenant/channel rules. Their bodies describe a one-day shift, June-only behavior, an invite arriving before booking, or different displayed days by location. These observations do not establish an independent root cause.
+
+Keep these reports in their computed group without counting them twice. Obtain the original input date, stored timestamp, time zone, and display path before deciding whether they share the parser cause. Do not claim that one parser fix necessarily resolves them, or diagnose a timezone bug from the wording alone.
+
+## Received is different from merged
+
+<QueueTimeline ticket={4471} />
+
+The received bars describe reports arriving over months. The merged bars describe when the desk processed them into this ticket. The July merge spike is a backlog event, not proof of a sudden July onset. Reports continue after that batch; a known status and a queued fix do not show that user impact stopped. The export alone contains no deployment evidence. The later engineering update reports the parser fixed and the hint left unfixed because the form was retired; it does not provide a deployment trace or anomaly-specific verification.
+
+## Triage by cause and preserve uncertainty
+
+The [old triage page](/kb/triage/dedupe) follows [decision 0001](/kb/decisions/0001-dedupe-by-subject), accepted in 2024. Its review age exceeds the layout's stale threshold. Read the rendered warning and the computed examples before relying on its prose. Recent review metadata on the original incident does not make its conclusion correct.
+
+<DedupeExplorer />
+
+Different subjects can describe the same cause; identical subjects can span different causes. Verify tenant locale, form version, channel, and observed behavior. A missing tenant means insufficient evidence, not permission to merge. Quarantine uncertain reports for investigation rather than forcing a match. [Decision 0002](/kb/decisions/0002-dedupe-by-cause) proposes replacing the subject-only rule for future triage without rewriting the accepted historical decision.
+
+## Evidence and limits
+
+This review uses `reports-4471.json`, `desk-notes.json`, the tenant directory, and the actual component logic in `causes.ts`, `locales.ts`, `staleness.ts`, and `dedupe-cases.ts`. Counts and charts above run at render time. The checked-in HTML is a dated rendering of this export; rerender after data changes. Report counts are not counts of distinct people, appointments, or current affected users.
+
+<RenderStamp {signature} />
