@@ -4,7 +4,7 @@ title: '0002 · Triage duplicates by verified cause'
 owner: jasieqb
 status: proposed
 reviewed: 2026-10-28
-signature: 'jasieqb · MEGA.dev S01E03 · 2026-10-28'
+signature: "v1.eyJzdWIiOiIyMjI2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyNjcwOTYsImV4cCI6MTc5MzM1MzQ5Nn0.ZqVIHSeREBjoANEzYTlnXLiXljfaQ8RiLAo34HQBqU0"
 ---
 
 <script>
